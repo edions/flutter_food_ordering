@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_food_ordering/pages/cart.dart';
-import 'package:flutter_food_ordering/pages/home.dart';
-import 'package:flutter_food_ordering/pages/profile.dart';
+import 'package:flutter_food_ordering/pages/cart/cart.dart';
+import 'package:flutter_food_ordering/pages/home/home.dart';
+import 'package:flutter_food_ordering/pages/profile/profile.dart';
 
 class NavigationWidget extends StatefulWidget {
   const NavigationWidget({super.key});
