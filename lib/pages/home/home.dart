@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../widgets/carousel.dart';
 import 'drink_list.dart';
 import 'food_list.dart';

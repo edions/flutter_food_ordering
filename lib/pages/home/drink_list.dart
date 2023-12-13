@@ -7,14 +7,14 @@ class MyDrinks extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
+        title: const Center(
           child: Text("Drinks"),
         ),
       ),
       body: ListView(
-        children: <Widget>[
+        children: const <Widget>[
           CategorySection(category: 'Cow Piss'),
-          CategorySection(category: 'Coffe'),
+          CategorySection(category: 'Coffee'),
         ],
       ),
     );
@@ -35,7 +35,7 @@ class CategorySection extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             category,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -48,17 +48,17 @@ class CategorySection extends StatelessWidget {
           itemBuilder: (context, index) {
             return ListTile(
               title: Text('Item $index'),
-              subtitle: Text('Price: \$10'),
+              subtitle: const Text('Price: \$10'),
               trailing: ElevatedButton(
                 onPressed: () {
                   print('Button clicked for Item $index in $category');
                 },
-                child: Icon(Icons.add),
+                child: const Icon(Icons.add),
               ),
             );
           },
         ),
-        Divider(
+        const Divider(
           thickness: 1,
           color: Colors.grey,
         ),

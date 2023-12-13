@@ -118,7 +118,7 @@ class _MyCartState extends State<CartPage> {
               onPressed: () {
                 print('Checkout button pressed');
               },
-              child: Text('Checkout'),
+              child: const Text('Checkout'),
             ),
           ),
         ],
