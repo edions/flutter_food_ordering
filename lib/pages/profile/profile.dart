@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_food_ordering/pages/login.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -47,55 +48,54 @@ class ProfilePage extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 20),
-              // Use a Container instead of ElevatedButton
-              Container(
-                width: double.infinity, // Take up the full width
-                padding: EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
-                  color: Colors.grey, // Customize the button color
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    // Add logic for editing profile
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.edit, color: Colors.white),
-                      SizedBox(width: 8),
-                      Text(
-                        'Edit Profile',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ],
+              // Use ElevatedButton for Edit Profile
+              ElevatedButton(
+                onPressed: () {
+                  // Add logic for editing profile
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey, // Customize the button color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.edit, color: Colors.white),
+                    SizedBox(width: 8),
+                    Text(
+                      'Edit Profile',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 20),
-              // Use a Container instead of ElevatedButton
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
-                  color: Colors.grey, // Customize the button color
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    // Add logic for logging out
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.logout, color: Colors.white),
-                      SizedBox(width: 8),
-                      Text(
-                        'Logout',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ],
+              // Use ElevatedButton for Logout
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.logout, color: Colors.white),
+                    SizedBox(width: 8),
+                    Text(
+                      'Logout',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ],
                 ),
               ),
             ],
