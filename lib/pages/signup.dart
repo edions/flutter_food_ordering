@@ -21,21 +21,12 @@ class _SignPageState extends State<SignPage> {
   final String validPassword = "123";
 
   void processLogin() async {
+    final sm = ScaffoldMessenger.of(context);
     final authResponse =  await supabase.auth.signUp(
         password: passController.text, email: emailController.text);
-    // String enteredEmail = emailController.text;
-    // String enteredPassword = passController.text;
-    //
-    // if (enteredEmail == validEmail && enteredPassword == validPassword) {
-    //   Navigator.pushReplacement(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => const NavigationWidget()),
-    //   );
-    // } else {
-    //   // Unsuccessful login
-    //   print("Login failed. Invalid credentials.");
-    //   // showToast("Invalid credentials");
-    // }
+
+    sm.showSnackBar(SnackBar(
+        content: Text("Logged In: ${authResponse.user!.email!}")));
   }
 
   // void showToast(String message) {
