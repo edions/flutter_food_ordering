@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_food_ordering/pages/signup.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 
 
@@ -117,10 +118,18 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  "Signup",
-                  style: TextStyle(
-                    fontSize: 15,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SignUpPage()),
+                    );
+                  },
+                  child: const Text(
+                    "Signup",
+                    // style: TextStyle(
+                    //   fontSize: 15,
+                    // ),
                   ),
                 ),
               ],
