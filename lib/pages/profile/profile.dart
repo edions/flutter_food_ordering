@@ -1,8 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_food_ordering/pages/login.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  ProfilePage({Key? key}) : super(key: key);
+
+  final user = FirebaseAuth.instance.currentUser!;
+
+  void signOutUser() {
+    FirebaseAuth.instance.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,19 +22,19 @@ class ProfilePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 50,
                 backgroundImage: NetworkImage(
                   'https://avatars.githubusercontent.com/u/133362311?v=4',
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
-                'edions',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                user.email!,
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
-              SizedBox(height: 20),
+              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               // Add an icon before the text
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -75,10 +81,7 @@ class ProfilePage extends StatelessWidget {
               // Use ElevatedButton for Logout
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
+                  signOutUser();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey,

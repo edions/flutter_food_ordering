@@ -17,7 +17,7 @@ class _NavState extends State<NavigationWidget> {
   List<Widget> pageList = [
     const HomePage(),
     const CartPage(),
-    const ProfilePage()
+    ProfilePage()
   ];
 
   @override

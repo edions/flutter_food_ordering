@@ -1,7 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_food_ordering/pages/home/home.dart';
+import 'package:flutter_food_ordering/firebase_options.dart';
+import 'package:flutter_food_ordering/pages/auth_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -24,7 +30,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         brightness: Brightness.dark,
       ),
-      home: const HomePage(),
+      home: const AuthPage(),
       debugShowCheckedModeBanner: false,
     );
   }

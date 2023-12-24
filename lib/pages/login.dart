@@ -1,5 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_food_ordering/widgets/navigation.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 
 
@@ -14,11 +14,30 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
-  // Hardcoded credentials for simplicity (replace with actual authentication logic)
-  final String validEmail = "user";
-  final String validPassword = "123";
-
   void processLogin() async {
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text,
+          password: passController.text);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('no user');
+      } else if (e.code == 'wrong-password') {
+        print('wrong')
+      }
+    }
+
+    Navigator.pop(context);
   }
 
   // void showToast(String message) {
@@ -47,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             TextField(
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
@@ -58,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
               controller: passController,
               obscureText: true, // Hide password
@@ -69,14 +88,14 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 processLogin();
                 emailController.clear();
                 passController.clear();
               },
-              child: Text("Login"),
+              child: const Text("Login"),
             ),
           ],
         ),
