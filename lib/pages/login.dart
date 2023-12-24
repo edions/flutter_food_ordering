@@ -29,16 +29,28 @@ class _LoginPageState extends State<LoginPage> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text,
           password: passController.text);
+      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('no user');
-      } else if (e.code == 'wrong-password') {
-        print('wrong')
-      }
+      Navigator.pop(context);
+      showErrorMessage(e.code);
     }
-
-    Navigator.pop(context);
   }
+
+  void showErrorMessage(String message) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.green,
+            title: Center(
+              child: Text(
+                message,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          );
+        });
+    }
 
   // void showToast(String message) {
   //   Fluttertoast.showToast(
@@ -57,47 +69,63 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            const Text(
-              "Login",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 50),
-            TextField(
-              controller: emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                labelText: "Email",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Login",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: passController,
-              obscureText: true, // Hide password
-              decoration: InputDecoration(
-                labelText: "Password",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+                const SizedBox(height: 50),
+                TextField(
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    labelText: "Email",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: passController,
+                  obscureText: true, // Hide password
+                  decoration: InputDecoration(
+                    labelText: "Password",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      processLogin();
+                      emailController.clear();
+                      passController.clear();
+                    },
+                    child: const Text("Login"),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  "Signup",
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                processLogin();
-                emailController.clear();
-                passController.clear();
-              },
-              child: const Text("Login"),
-            ),
-          ],
+          ),
         ),
       ),
     );
