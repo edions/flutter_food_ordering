@@ -137,5 +137,14 @@ app.*.symbols
 !/dev/ci/**/Gemfile.lock
 !.vscode/settings.json
 
+# Firebase
+.firebase/
+firestore.rules
+firebase.json
+firebase-debug.log
+
+# Firebase configuration file
+firebase_options.dart
+
 # Ignore .env files
 assets/.env

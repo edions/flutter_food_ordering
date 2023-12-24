@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_food_ordering/widgets/navigation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 
-final supabase = Supabase.instance.client;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -21,21 +19,6 @@ class _LoginPageState extends State<LoginPage> {
   final String validPassword = "123";
 
   void processLogin() async {
-    final authResponse =  await supabase.auth.signUp(
-        password: passController.text, email: emailController.text);
-    // String enteredEmail = emailController.text;
-    // String enteredPassword = passController.text;
-    //
-    // if (enteredEmail == validEmail && enteredPassword == validPassword) {
-    //   Navigator.pushReplacement(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => const NavigationWidget()),
-    //   );
-    // } else {
-    //   // Unsuccessful login
-    //   print("Login failed. Invalid credentials.");
-    //   // showToast("Invalid credentials");
-    // }
   }
 
   // void showToast(String message) {

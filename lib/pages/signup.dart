@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_food_ordering/widgets/navigation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
-
-final supabase = Supabase.instance.client;
 
 class SignPage extends StatefulWidget {
   const SignPage({Key? key}) : super(key: key);
@@ -21,12 +18,6 @@ class _SignPageState extends State<SignPage> {
   final String validPassword = "123";
 
   void processLogin() async {
-    final sm = ScaffoldMessenger.of(context);
-    final authResponse =  await supabase.auth.signUp(
-        password: passController.text, email: emailController.text);
-
-    sm.showSnackBar(SnackBar(
-        content: Text("Logged In: ${authResponse.user!.email!}")));
   }
 
   // void showToast(String message) {
