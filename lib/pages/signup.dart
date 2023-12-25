@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_food_ordering/pages/login.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  final Function()? onTap;
+  const SignUpPage({Key? key, required this.onTap}) : super(key: key);
 
   @override
   State<SignUpPage> createState() => _SignPageState();
@@ -27,12 +26,14 @@ class _SignPageState extends State<SignUpPage> {
     );
 
     try {
-      if(passController.text == confirmPassController.text) {
+      if(passController.text != confirmPassController.text) {
+        Navigator.pop(context);
+        showErrorMessage("Password don't match!");
+        return;
+      } else {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: emailController.text,
             password: passController.text);
-      } else {
-        showErrorMessage("Password don't match!");
       }
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
@@ -56,18 +57,6 @@ class _SignPageState extends State<SignUpPage> {
           );
         });
   }
-
-  // void showToast(String message) {
-  //   Fluttertoast.showToast(
-  //     msg: message,
-  //     toastLength: Toast.LENGTH_SHORT,
-  //     gravity: ToastGravity.BOTTOM,
-  //     timeInSecForIosWeb: 1,
-  //     backgroundColor: Colors.red,
-  //     textColor: Colors.white,
-  //     fontSize: 16.0,
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -126,20 +115,13 @@ class _SignPageState extends State<SignUpPage> {
                   child: ElevatedButton(
                     onPressed: () {
                       processLogin();
-                      emailController.clear();
-                      passController.clear();
                     },
                     child: const Text("Register"),
                   ),
                 ),
                 const SizedBox(height: 20),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LoginPage()),
-                    );
-                  },
+                  onTap: widget.onTap,
                   child: const Text(
                     "Login",
                     // style: TextStyle(

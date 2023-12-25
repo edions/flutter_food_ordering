@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_food_ordering/pages/signup.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
 
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final Function()? onTap;
+  const LoginPage({Key? key, required this.onTap}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -53,18 +52,6 @@ class _LoginPageState extends State<LoginPage> {
         });
     }
 
-  // void showToast(String message) {
-  //   Fluttertoast.showToast(
-  //     msg: message,
-  //     toastLength: Toast.LENGTH_SHORT,
-  //     gravity: ToastGravity.BOTTOM,
-  //     timeInSecForIosWeb: 1,
-  //     backgroundColor: Colors.red,
-  //     textColor: Colors.white,
-  //     fontSize: 16.0,
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,20 +98,13 @@ class _LoginPageState extends State<LoginPage> {
                   child: ElevatedButton(
                     onPressed: () {
                       processLogin();
-                      emailController.clear();
-                      passController.clear();
                     },
                     child: const Text("Login"),
                   ),
                 ),
                 const SizedBox(height: 20),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const SignUpPage()),
-                    );
-                  },
+                  onTap: widget.onTap,
                   child: const Text(
                     "Signup",
                     // style: TextStyle(
