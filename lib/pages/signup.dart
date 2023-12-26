@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -13,9 +14,11 @@ class _SignPageState extends State<SignUpPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
 
   void processLogin() async {
-
     showDialog(
       context: context,
       builder: (context) {
@@ -26,14 +29,31 @@ class _SignPageState extends State<SignUpPage> {
     );
 
     try {
-      if(passController.text != confirmPassController.text) {
+      if (passController.text != confirmPassController.text) {
         Navigator.pop(context);
         showErrorMessage("Password don't match!");
         return;
       } else {
+        UserCredential userCredential =
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: emailController.text,
-            password: passController.text);
+          email: emailController.text,
+          password: passController.text,
+        );
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
+          'name': nameController.text,
+          'phoneNumber': phoneNumberController.text,
+          'location': locationController.text,
+        }).then((value) {
+          print("User data saved successfully!");
+          Navigator.pop(context);
+        }).catchError((error) {
+          Navigator.pop(context);
+          showErrorMessage("Failed to save user data");
+        });
       }
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
@@ -76,6 +96,37 @@ class _SignPageState extends State<SignUpPage> {
                   ),
                 ),
                 const SizedBox(height: 50),
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    labelText: "Name",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: phoneNumberController,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    labelText: "Phone Number",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: locationController,
+                  decoration: InputDecoration(
+                    labelText: "Location",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
                 TextField(
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
