@@ -1,10 +1,42 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProfilePage extends StatelessWidget {
-  ProfilePage({Key? key}) : super(key: key);
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({Key? key}) : super(key: key);
 
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   final user = FirebaseAuth.instance.currentUser!;
+  String userLocation = 'Loading...';
+  String userPhoneNumber = 'Loading...';
+  String userName = 'Loading...';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    try {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      setState(() {
+        userName = userDoc['name'] ?? 'Not available';
+        userLocation = userDoc['location'] ?? 'Not available';
+        userPhoneNumber = userDoc['phoneNumber'] ?? 'Not available';
+      });
+    } catch (e) {
+      print("Error fetching user data: $e");
+    }
+  }
 
   void signOutUser() {
     FirebaseAuth.instance.signOut();
@@ -30,42 +62,39 @@ class ProfilePage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                user.email!,
+                userName,
                 style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.location_on),
+                  const SizedBox(width: 8),
+                  Text(userLocation),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.phone),
+                  const SizedBox(width: 8),
+                  Text(userPhoneNumber),
+                ],
+              ),
               const SizedBox(height: 20),
-              // Add an icon before the text
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.location_on),
-                  SizedBox(width: 8), // Adjust the spacing as needed
-                  Text('Anywhere at the same time'),
-                ],
-              ),
-              SizedBox(height: 8), // Adjust the spacing as needed
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.phone),
-                  SizedBox(width: 8), // Adjust the spacing as needed
-                  Text('+9000'),
-                ],
-              ),
-              SizedBox(height: 20),
-              // Use ElevatedButton for Edit Profile
               ElevatedButton(
                 onPressed: () {
                   // Add logic for editing profile
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey, // Customize the button color
+                  backgroundColor: Colors.grey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.edit, color: Colors.white),
@@ -77,8 +106,7 @@ class ProfilePage extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
-              // Use ElevatedButton for Logout
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   signOutUser();
@@ -89,7 +117,7 @@ class ProfilePage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.logout, color: Colors.white),
