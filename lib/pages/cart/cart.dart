@@ -114,11 +114,15 @@ class _MyCartState extends State<CartPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: ElevatedButton(
-              onPressed: () {
-                print('Checkout button pressed');
-              },
-              child: const Text('Checkout'),
+            child: SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  print('Checkout button pressed');
+                },
+                child: const Text('Checkout'),
+              ),
             ),
           ),
         ],
