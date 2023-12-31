@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               radius: 25,
-                              backgroundColor: Colors.blue,
+                              //backgroundColor: Colors.blue,
                               child: Icon(
                                 Icons.fastfood,
                                 color: Colors.white,
@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
                             SizedBox(height: 4),
                             Text(
                               "FOODS",
-                              style: TextStyle(fontSize: 14, color: Colors.blue),
+                              style: TextStyle(fontSize: 14, color: Colors.green),
                             ),
                           ],
                         ),
@@ -64,7 +64,7 @@ class HomePage extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               radius: 25,
-                              backgroundColor: Colors.blue,
+                              //backgroundColor: Colors.blue,
                               child: Icon(
                                 Icons.local_drink,
                                 color: Colors.white,
@@ -73,7 +73,7 @@ class HomePage extends StatelessWidget {
                             SizedBox(height: 4),
                             Text(
                               "DRINKS",
-                              style: TextStyle(fontSize: 14, color: Colors.blue),
+                              style: TextStyle(fontSize: 14, color: Colors.green),
                             ),
                           ],
                         ),
@@ -84,7 +84,7 @@ class HomePage extends StatelessWidget {
                 const SizedBox(height: 20),
                 const Text("WHATS NEW",
                   style: TextStyle(
-                      fontSize: 20, color: Colors.blue
+                      fontSize: 20, color: Colors.green
                   ),),
                 const SizedBox(height: 20),
                 ImageCarousel(
@@ -98,11 +98,16 @@ class HomePage extends StatelessWidget {
                 const SizedBox(height: 20),
                 const Text("HOT SINGLE IN UR AREA",
                   style: TextStyle(
-                      fontSize: 20, color: Colors.blue
+                      fontSize: 20, color: Colors.green
                   ),),
                 const SizedBox(height: 20),
                 Column(
                   children: [
+                    buildContainerRow(
+                        ['https://raw.githubusercontent.com/curiouslumber/Ecostora/main/images/Categories/avacados.jpg',
+                          'https://raw.githubusercontent.com/curiouslumber/Ecostora/main/images/Categories/avacados.jpg',
+                          'https://raw.githubusercontent.com/curiouslumber/Ecostora/main/images/Categories/avacados.jpg',]
+                    ),
                     buildContainerRow(
                         ['https://raw.githubusercontent.com/curiouslumber/Ecostora/main/images/Categories/avacados.jpg',
                           'https://raw.githubusercontent.com/curiouslumber/Ecostora/main/images/Categories/avacados.jpg',

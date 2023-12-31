@@ -57,6 +57,24 @@ class _MyCartState extends State<CartPage> {
     });
   }
 
+  void openCheckoutBox() {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: const Text("Total Price"),
+          actions: [
+            Center(
+              child: ElevatedButton(
+                  onPressed: () {
+
+                  },
+                  child: const Text("Confirm Order"),
+              ),
+            )
+          ],
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,7 +137,7 @@ class _MyCartState extends State<CartPage> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  print('Checkout button pressed');
+                  openCheckoutBox();
                 },
                 child: const Text('Checkout'),
               ),
@@ -131,8 +149,8 @@ class _MyCartState extends State<CartPage> {
   }
 }
 
-void main() {
-  runApp(const MaterialApp(
-    home: CartPage(),
-  ));
-}
+// void main() {
+//   runApp(const MaterialApp(
+//     home: CartPage(),
+//   ));
+// }

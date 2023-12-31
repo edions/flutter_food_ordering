@@ -17,8 +17,14 @@ class _NavState extends State<NavigationWidget> {
   List<Widget> pageList = [
     const HomePage(),
     const CartPage(),
-    ProfilePage()
+    const ProfilePage()
   ];
+
+  void bottomNavTap(int value) {
+    setState(() {
+      selectedNavIcon = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +41,5 @@ class _NavState extends State<NavigationWidget> {
           onTap: bottomNavTap,
       ),
     );
-  }
-
-  void bottomNavTap(int value) {
-    setState(() {
-      selectedNavIcon = value;
-    });
   }
 }

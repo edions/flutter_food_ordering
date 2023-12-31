@@ -40,10 +40,9 @@ class _SignPageState extends State<SignUpPage> {
           password: passController.text,
         );
 
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userCredential.user!.uid)
-            .set({
+        var userDocRef = FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid);
+
+        await userDocRef.collection('info').doc("data").set({
           'name': nameController.text,
           'phoneNumber': phoneNumberController.text,
           'location': locationController.text,

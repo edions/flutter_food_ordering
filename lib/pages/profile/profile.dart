@@ -28,6 +28,8 @@ class _ProfilePageState extends State<ProfilePage> {
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
+          .collection('info')
+          .doc('data')
           .get();
 
       setState(() {
