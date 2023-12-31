@@ -18,7 +18,7 @@ class _SignPageState extends State<SignUpPage> {
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController locationController = TextEditingController();
 
-  void processLogin() async {
+  void processSignUp() async {
     showDialog(
       context: context,
       builder: (context) {
@@ -165,7 +165,7 @@ class _SignPageState extends State<SignUpPage> {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      processLogin();
+                      processSignUp();
                     },
                     child: const Text("Register"),
                   ),

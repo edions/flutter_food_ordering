@@ -86,7 +86,7 @@ class _MyCartState extends State<CartPage> {
                           color: Colors.blue,
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Text(item['name']),
                     ],
                   ),
