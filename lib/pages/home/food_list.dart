@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_food_ordering/services/firestore.dart';
 
@@ -12,29 +13,48 @@ class MyFoods extends StatefulWidget {
 class _MyFoodsState extends State<MyFoods> {
 
   final ProductService productService = ProductService();
+  final user = FirebaseAuth.instance.currentUser!;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   final TextEditingController addProductText = TextEditingController();
 
-  void openAddProduct() {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: TextField(
-            controller: addProductText,
-          ),
-          actions: [
-            ElevatedButton(
-                onPressed: () {
-                  productService.addProduct(addProductText.text, addProductText.text);
+  void addToCart(String productName) async {
+    productService.addProduct(productName, productName);
 
-                  addProductText.clear();
+    var userDocRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
 
-                  Navigator.pop(context);
-                },
-                child: const Text("Add"),)
-          ],
-        ));
+    double price = 10.0;
+    int quantity = 1;
+
+    await userDocRef.collection('cart').add({
+      'product': productName,
+      'price': price,
+      'quantity': quantity,
+      'timestamp': Timestamp.now(),
+    });
   }
+
+
+  // void openAddProduct() {
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) => AlertDialog(
+  //         content: TextField(
+  //           controller: addProductText,
+  //         ),
+  //         actions: [
+  //           ElevatedButton(
+  //               onPressed: () {
+  //                 productService.addProduct(addProductText.text, addProductText.text);
+  //
+  //                 addProductText.clear();
+  //
+  //                 Navigator.pop(context);
+  //               },
+  //               child: const Text("Add"),)
+  //         ],
+  //       ));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +62,7 @@ class _MyFoodsState extends State<MyFoods> {
       appBar: AppBar(title: const Text("Foods")),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          openAddProduct();
+          //openAddProduct();
         },
         child: const Icon(Icons.add),
       ),
@@ -70,7 +90,9 @@ class _MyFoodsState extends State<MyFoods> {
                   title: Text(productText),
                   subtitle: const Text("\$ 99"),
                   trailing: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      addToCart(productText);
+                    },
                     icon: const Icon(Icons.add),
                   ),
                 );

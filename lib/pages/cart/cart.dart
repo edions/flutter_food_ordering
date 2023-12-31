@@ -1,156 +1,66 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../services/cart.dart';
 
 class CartPage extends StatefulWidget {
-  const CartPage({Key? key}) : super(key: key);
+  const CartPage({super.key});
 
   @override
-  _MyCartState createState() => _MyCartState();
+  State<CartPage> createState() => _CartPageState();
 }
 
-class _MyCartState extends State<CartPage> {
-  List<Map<String, dynamic>> cartItems = [
-    {'name': 'Item 1', 'quantity': 1},
-    {'name': 'Item 2', 'quantity': 2},
-    {'name': 'Item 3', 'quantity': 3},
-  ];
+class _CartPageState extends State<CartPage> {
 
-  void _removeItem(int index) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirm Delete'),
-          content: const Text('Are you sure you want to delete this item from your cart?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  cartItems.removeAt(index);
-                });
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text('Delete'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  final CartService cartService = CartService();
+  final String userId = FirebaseAuth.instance.currentUser!.uid;
 
-  void _increaseQuantity(int index) {
-    setState(() {
-      cartItems[index]['quantity']++;
-    });
-  }
-
-  void _decreaseQuantity(int index) {
-    setState(() {
-      if (cartItems[index]['quantity'] > 1) {
-        cartItems[index]['quantity']--;
-      }
-    });
-  }
-
-  void openCheckoutBox() {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: const Text("Total Price"),
-          actions: [
-            Center(
-              child: ElevatedButton(
-                  onPressed: () {
-
-                  },
-                  child: const Text("Confirm Order"),
-              ),
-            )
-          ],
-        ));
+  Future<void> removeFromCart(String productId) async {
+    // Implement the logic to remove the product from the cart
+    // You might use cartService.removeProduct(productId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cart'),
+        title: const Text("Cart"),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: cartItems.isEmpty
-                ? const Center(
-              child: Text('Your cart is empty.'),
-            )
-                : ListView.builder(
-              itemCount: cartItems.length,
+      body: StreamBuilder<QuerySnapshot>(
+        stream: cartService.getCartStream(userId),
+        builder: (context, snapshot) {
+          if(snapshot.hasData) {
+            List productList = snapshot.data!.docs;
+
+            return ListView.builder(
+              itemCount: productList.length,
               itemBuilder: (context, index) {
-                final item = cartItems[index];
+                DocumentSnapshot document = productList[index];
+                String docID = document.id;
+
+                Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+                String productText = data['product'];
+
                 return ListTile(
-                  title: Row(
-                    children: [
-                      Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white),
-                          borderRadius: BorderRadius.circular(16),
-                          color: Colors.blue,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(item['name']),
-                    ],
+                  leading: const CircleAvatar(
+                    backgroundImage: NetworkImage('https://raw.githubusercontent.com/curiouslumber/Ecostora/main/images/Categories/apples.jpg'),
                   ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.remove),
-                        onPressed: () => _decreaseQuantity(index),
-                      ),
-                      Text('${item['quantity']}'),
-                      IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: () => _increaseQuantity(index),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () => _removeItem(index),
-                      ),
-                    ],
+                  title: Text(productText),
+                  subtitle: const Text("\$ 99"),
+                  trailing: IconButton(
+                    onPressed: () {
+                      removeFromCart(docID);
+                    },
+                    icon: const Icon(Icons.remove_shopping_cart),
                   ),
                 );
               },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  openCheckoutBox();
-                },
-                child: const Text('Checkout'),
-              ),
-            ),
-          ),
-        ],
+            );
+          } else {
+            return const Center(child: Text("No data"));
+          }
+        },
       ),
     );
   }
 }
-
-// void main() {
-//   runApp(const MaterialApp(
-//     home: CartPage(),
-//   ));
-// }
