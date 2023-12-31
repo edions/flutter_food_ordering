@@ -1,68 +1,85 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_food_ordering/services/firestore.dart';
 
-class MyFoods extends StatelessWidget {
+class MyFoods extends StatefulWidget {
   const MyFoods({super.key});
+
+  @override
+  State<MyFoods> createState() => _MyFoodsState();
+}
+
+class _MyFoodsState extends State<MyFoods> {
+
+  final ProductService productService = ProductService();
+
+  final TextEditingController addProductText = TextEditingController();
+
+  void openAddProduct() {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: TextField(
+            controller: addProductText,
+          ),
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  productService.addProduct(addProductText.text, addProductText.text);
+
+                  addProductText.clear();
+
+                  Navigator.pop(context);
+                },
+                child: const Text("Add"),)
+          ],
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(
-          child: Text("Food"),
-        ),
+      appBar: AppBar(title: const Text("Foods")),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          openAddProduct();
+        },
+        child: const Icon(Icons.add),
       ),
-      body: ListView(
-        children: const <Widget>[
-          CategorySection(category: 'Donuts'),
-          CategorySection(category: 'Takuyaki'),
-        ],
-      ),
-    );
-  }
-}
+      body: StreamBuilder<QuerySnapshot>(
+        stream: productService.getProductStream(),
+        builder: (context, snapshot) {
+          if(snapshot.hasData) {
+            List productList = snapshot.data!.docs;
 
-class CategorySection extends StatelessWidget {
-  final String category;
+            return ListView.builder(
+              itemCount: productList.length,
+                itemBuilder: (context, index) {
 
-  const CategorySection({Key? key, required this.category}) : super(key: key);
+                DocumentSnapshot document = productList[index];
+                String docID = document.id;
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            category,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text('Item $index'),
-              subtitle: const Text('Price: \$10'),
-              trailing: ElevatedButton(
-                onPressed: () {
-                  print('Button clicked for Item $index in $category');
-                },
-                child: const Icon(Icons.add),
-              ),
+                Map<String, dynamic> data =
+                    document.data() as Map<String, dynamic>;
+                String productText = data['product'];
+
+                return ListTile(
+                  leading: const CircleAvatar(
+                    backgroundImage: NetworkImage('https://raw.githubusercontent.com/curiouslumber/Ecostora/main/images/Categories/apples.jpg'),
+                  ),
+                  title: Text(productText),
+                  subtitle: const Text("\$ 99"),
+                  trailing: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.add),
+                  ),
+                );
+            }
             );
-          },
-        ),
-        const Divider(
-          thickness: 1,
-          color: Colors.grey,
-        ),
-      ],
+          } else {
+            return const Center(child: Text("No data"));}
+        },
+      ),
     );
   }
 }
