@@ -96,7 +96,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey,
+                  // backgroundColor: Colors.grey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -116,10 +116,36 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const EditProfilePage()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  // backgroundColor: Colors.grey,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.edit, color: Colors.white),
+                    SizedBox(width: 8),
+                    Text(
+                      'View Orders',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
                   signOutUser();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey,
+                  //backgroundColor: Colors.grey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
