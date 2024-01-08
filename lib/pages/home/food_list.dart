@@ -18,18 +18,18 @@ class _MyFoodsState extends State<MyFoods> {
 
   final TextEditingController addProductText = TextEditingController();
 
-  void addToCart(String productName) async {
-    productService.addProduct(productName, productName);
+  void addToCart(String productName, String priceText, String imageUrl) async {
+    //productService.addProduct(productName, priceText, imageUrl);
 
     var userDocRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
 
-    double price = 10.0;
     int quantity = 1;
 
     await userDocRef.collection('cart').add({
       'product': productName,
-      'price': price,
+      'price': priceText,
       'quantity': quantity,
+      'image' : imageUrl,
       'timestamp': Timestamp.now(),
     });
   }
@@ -45,10 +45,10 @@ class _MyFoodsState extends State<MyFoods> {
             List productList = snapshot.data!.docs;
 
             return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Number of columns in the grid
-                crossAxisSpacing: 8.0, // Spacing between columns
-                mainAxisSpacing: 8.0, // Spacing between rows
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
               ),
               itemCount: productList.length,
               itemBuilder: (context, index) {
@@ -75,7 +75,7 @@ class _MyFoodsState extends State<MyFoods> {
                         subtitle: Text("\$$priceText"),
                         trailing: IconButton(
                           onPressed: () {
-                            addToCart(productText);
+                            addToCart(productText, priceText, imageUrl);
                           },
                           icon: const Icon(Icons.shopping_cart),
                         ),

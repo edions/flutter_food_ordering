@@ -4,10 +4,11 @@ class ProductService {
   final CollectionReference products =
       FirebaseFirestore.instance.collection("products");
 
-  Future<void> addProduct(String product, String price) {
+  Future<void> addProduct(String product, String price, String image) {
     return products.add({
       'product': product,
       'price' : price,
+      'image' : image,
       'timestamp': Timestamp.now(),
     });
   }

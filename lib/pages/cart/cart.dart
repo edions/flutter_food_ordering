@@ -60,13 +60,15 @@ class _CartPageState extends State<CartPage> {
             
                       Map<String, dynamic> data = document.data() as Map<String, dynamic>;
                       String productText = data['product'];
+                      String priceText = data['price'];
+                      String productImg = data['image'];
             
                       return ListTile(
-                        leading: const CircleAvatar(
-                          backgroundImage: NetworkImage('https://raw.githubusercontent.com/curiouslumber/Ecostora/main/images/Categories/apples.jpg'),
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(productImg),
                         ),
                         title: Text(productText),
-                        subtitle: const Text("\$ 99"),
+                        subtitle: Text("\$$priceText"),
                         trailing: IconButton(
                           onPressed: () {
                             removeFromCart(docID);
