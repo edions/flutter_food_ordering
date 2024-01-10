@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProductService {
+class FoodService {
   final CollectionReference products =
-      FirebaseFirestore.instance.collection("products");
+      FirebaseFirestore.instance.collection("foods");
 
-  Future<void> addProduct(String product, String price, String image) {
+  Future<void> addProduct(String food, String price, String image) {
     return products.add({
-      'product': product,
+      'food': food,
       'price' : price,
       'image' : image,
       'timestamp': Timestamp.now(),

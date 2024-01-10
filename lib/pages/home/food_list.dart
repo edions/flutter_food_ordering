@@ -12,7 +12,7 @@ class MyFoods extends StatefulWidget {
 
 class _MyFoodsState extends State<MyFoods> {
 
-  final ProductService productService = ProductService();
+  final FoodService productService = FoodService();
   final user = FirebaseAuth.instance.currentUser!;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -26,7 +26,7 @@ class _MyFoodsState extends State<MyFoods> {
     int quantity = 1;
 
     await userDocRef.collection('cart').add({
-      'product': productName,
+      'food': productName,
       'price': priceText,
       'quantity': quantity,
       'image' : imageUrl,

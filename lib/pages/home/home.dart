@@ -140,12 +140,12 @@ Widget buildContainerRow(List<String> imageUrls) {
 
 Widget buildCustomContainer(String imageUrl) {
   return Padding(
-    padding: const EdgeInsets.all(4.0),
+    padding: const EdgeInsets.all(8.0),
     child: ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        height: 94,
-        width: 128,
+        height: 95,
+        width: 110,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.white),
           borderRadius: BorderRadius.circular(16),
