@@ -12,7 +12,7 @@ class MyFoods extends StatefulWidget {
 
 class _MyFoodsState extends State<MyFoods> {
 
-  final FoodService productService = FoodService();
+  final FoodService fooodService = FoodService();
   final user = FirebaseAuth.instance.currentUser!;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -39,7 +39,7 @@ class _MyFoodsState extends State<MyFoods> {
     return Scaffold(
       appBar: AppBar(title: const Text("Foods")),
       body: StreamBuilder<QuerySnapshot>(
-        stream: productService.getProductStream(),
+        stream: fooodService.getFoodStream(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List productList = snapshot.data!.docs;

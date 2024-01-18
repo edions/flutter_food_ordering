@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FoodService {
-  final CollectionReference products =
+  final CollectionReference foods =
       FirebaseFirestore.instance.collection("foods");
 
   Future<void> addProduct(String food, String price, String image) {
-    return products.add({
+    return foods.add({
       'food': food,
       'price' : price,
       'image' : image,
@@ -13,10 +13,31 @@ class FoodService {
     });
   }
 
-  Stream<QuerySnapshot> getProductStream() {
-    final productStream =
-    products.orderBy("timestamp", descending: true).snapshots();
+  Stream<QuerySnapshot> getFoodStream() {
+    final foodStream =
+    foods.orderBy("timestamp", descending: true).snapshots();
 
-    return productStream;
+    return foodStream;
+  }
+}
+
+class DrinkService {
+  final CollectionReference drinks =
+  FirebaseFirestore.instance.collection("drinks");
+
+  Future<void> addProduct(String food, String price, String image) {
+    return drinks.add({
+      'drink': food,
+      'price' : price,
+      'image' : image,
+      'timestamp': Timestamp.now(),
+    });
+  }
+
+  Stream<QuerySnapshot> getDrinkStream() {
+    final drinkStream =
+    drinks.orderBy("timestamp", descending: true).snapshots();
+
+    return drinkStream;
   }
 }
