@@ -12,11 +12,11 @@ class MyFoods extends StatefulWidget {
 
 class _MyFoodsState extends State<MyFoods> {
 
-  final FoodService fooodService = FoodService();
+  final FoodService foodService = FoodService();
   final user = FirebaseAuth.instance.currentUser!;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  final TextEditingController addProductText = TextEditingController();
+  //final TextEditingController addProductText = TextEditingController();
 
   void addToCart(String productName, String priceText, String imageUrl) async {
     //productService.addProduct(productName, priceText, imageUrl);
@@ -39,7 +39,7 @@ class _MyFoodsState extends State<MyFoods> {
     return Scaffold(
       appBar: AppBar(title: const Text("Foods")),
       body: StreamBuilder<QuerySnapshot>(
-        stream: fooodService.getFoodStream(),
+        stream: foodService.getFoodStream(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List productList = snapshot.data!.docs;
