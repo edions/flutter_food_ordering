@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
 class LoginPage extends StatefulWidget {
-  final Function()? onTap;
-  const LoginPage({Key? key, required this.onTap}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -15,20 +13,20 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController passController = TextEditingController();
 
   void processLogin() async {
-
     showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      );
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
 
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text,
-          password: passController.text);
+        email: emailController.text,
+        password: passController.text,
+      );
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
@@ -38,26 +36,33 @@ class _LoginPageState extends State<LoginPage> {
 
   void showErrorMessage(String message) {
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Colors.green,
-            title: Center(
-              child: Text(
-                message,
-                style: const TextStyle(color: Colors.white),
-              ),
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.red, // Changed color to red for visibility
+          title: Center(
+            child: Text(
+              message,
+              style: const TextStyle(color: Colors.white),
             ),
-          );
-        });
-    }
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Center(
+      body: Center(
+        child: Container(
+          width: 500,
+          padding: const EdgeInsets.all(20.0),
+          margin: const EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.blueGrey),
+          ),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -69,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 20),
                 TextField(
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -80,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 TextField(
                   controller: passController,
                   obscureText: true, // Hide password
@@ -91,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -100,16 +105,6 @@ class _LoginPageState extends State<LoginPage> {
                       processLogin();
                     },
                     child: const Text("Login"),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                GestureDetector(
-                  onTap: widget.onTap,
-                  child: const Text(
-                    "Signup",
-                    // style: TextStyle(
-                    //   fontSize: 15,
-                    // ),
                   ),
                 ),
               ],

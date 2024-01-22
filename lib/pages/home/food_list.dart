@@ -18,43 +18,77 @@ class _MyFoodsState extends State<MyFoods> {
 
   final TextEditingController addProductText = TextEditingController();
 
-  void addToCart(String productName) async {
-    productService.addProduct(productName, productName);
+  // void addToCart(String productName) async {
+  //   productService.addProduct(productName, productName);
+  //
+  //   var userDocRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
+  //
+  //   double price = 10.0;
+  //   int quantity = 1;
+  //
+  //   await userDocRef.collection('cart').add({
+  //     'product': productName,
+  //     'price': price,
+  //     'quantity': quantity,
+  //     'timestamp': Timestamp.now(),
+  //   });
+  // }
 
-    var userDocRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
 
-    double price = 10.0;
-    int quantity = 1;
+  void openProductBox({String? docID}) {
+    TextEditingController productNameController = TextEditingController();
+    TextEditingController productPriceController = TextEditingController();
+    TextEditingController productImageController = TextEditingController();
 
-    await userDocRef.collection('cart').add({
-      'product': productName,
-      'price': price,
-      'quantity': quantity,
-      'timestamp': Timestamp.now(),
-    });
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: productNameController,
+              decoration: const InputDecoration(labelText: 'Product Name'),
+            ),
+            TextField(
+              controller: productPriceController,
+              decoration: const InputDecoration(labelText: 'Price'),
+            ),
+            TextField(
+              controller: productImageController,
+              decoration: const InputDecoration(labelText: 'Image Link'),
+            ),
+          ],
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              if (docID == null) {
+                productService.addProduct(
+                  productNameController.text,
+                  productPriceController.text,
+                  productImageController.text
+                );
+              } else {
+                productService.updateProduct(
+                  docID,
+                  productNameController.text,
+                  productPriceController.text,
+                );
+              }
+
+              productNameController.clear();
+              productPriceController.clear();
+
+              Navigator.pop(context);
+            },
+            child: const Text("Add"),
+          )
+        ],
+      ),
+    );
   }
 
-
-  // void openAddProduct() {
-  //   showDialog(
-  //       context: context,
-  //       builder: (context) => AlertDialog(
-  //         content: TextField(
-  //           controller: addProductText,
-  //         ),
-  //         actions: [
-  //           ElevatedButton(
-  //               onPressed: () {
-  //                 productService.addProduct(addProductText.text, addProductText.text);
-  //
-  //                 addProductText.clear();
-  //
-  //                 Navigator.pop(context);
-  //               },
-  //               child: const Text("Add"),)
-  //         ],
-  //       ));
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +96,7 @@ class _MyFoodsState extends State<MyFoods> {
       appBar: AppBar(title: const Text("Foods")),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          //openAddProduct();
+          openProductBox();
         },
         child: const Icon(Icons.add),
       ),
@@ -82,18 +116,32 @@ class _MyFoodsState extends State<MyFoods> {
                 Map<String, dynamic> data =
                     document.data() as Map<String, dynamic>;
                 String productText = data['product'];
+                String priceText = "\$"+data['price'];
+                String imageUrl = data['image'];
 
-                return ListTile(
-                  leading: const CircleAvatar(
-                    backgroundImage: NetworkImage('https://raw.githubusercontent.com/curiouslumber/Ecostora/main/images/Categories/apples.jpg'),
-                  ),
-                  title: Text(productText),
-                  subtitle: const Text("\$ 99"),
-                  trailing: IconButton(
-                    onPressed: () {
-                      addToCart(productText);
-                    },
-                    icon: const Icon(Icons.add),
+                return Container(
+                  decoration: BoxDecoration(color: Colors.black87,
+                  borderRadius: BorderRadius.circular(10)),
+                  margin: const EdgeInsets.only(bottom: 20),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(imageUrl),
+                    ),
+                    title: Text(productText),
+                    subtitle: Text(priceText),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          onPressed: () => openProductBox(docID: docID),
+                          icon: const Icon(Icons.edit),
+                        ),
+                        IconButton(
+                          onPressed: () => productService.deleteProduct(docID),
+                          icon: const Icon(Icons.delete),
+                        ),
+                      ],
+                    ),
                   ),
                 );
             }
