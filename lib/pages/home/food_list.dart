@@ -26,7 +26,7 @@ class _MyFoodsState extends State<MyFoods> {
     int quantity = 1;
 
     await userDocRef.collection('cart').add({
-      'food': productName,
+      'product': productName,
       'price': priceText,
       'quantity': quantity,
       'image' : imageUrl,
@@ -57,7 +57,7 @@ class _MyFoodsState extends State<MyFoods> {
 
                 Map<String, dynamic> data =
                 document.data() as Map<String, dynamic>;
-                String productText = data['product'];
+                String productText = data['food'];
                 String priceText = data['price'];
                 String imageUrl = data['image'];
 

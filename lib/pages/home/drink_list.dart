@@ -26,7 +26,7 @@ class _MyDrinksState extends State<MyDrinks> {
     int quantity = 1;
 
     await userDocRef.collection('cart').add({
-      'drink': productName,
+      'product': productName,
       'price': priceText,
       'quantity': quantity,
       'image' : imageUrl,
@@ -57,7 +57,7 @@ class _MyDrinksState extends State<MyDrinks> {
 
                 Map<String, dynamic> data =
                 document.data() as Map<String, dynamic>;
-                String productText = data['product'];
+                String productText = data['drink'];
                 String priceText = data['price'];
                 String imageUrl = data['image'];
 
