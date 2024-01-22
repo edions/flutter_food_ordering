@@ -12,11 +12,11 @@ class MyFoods extends StatefulWidget {
 
 class _MyFoodsState extends State<MyFoods> {
 
-  final ProductService productService = ProductService();
+  final FoodService foodService = FoodService();
   final user = FirebaseAuth.instance.currentUser!;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  final TextEditingController addProductText = TextEditingController();
+  //final TextEditingController addProductText = TextEditingController();
 
   // void addToCart(String productName) async {
   //   productService.addProduct(productName, productName);
@@ -64,21 +64,23 @@ class _MyFoodsState extends State<MyFoods> {
           ElevatedButton(
             onPressed: () {
               if (docID == null) {
-                productService.addProduct(
+                foodService.addFood(
                   productNameController.text,
                   productPriceController.text,
                   productImageController.text
                 );
               } else {
-                productService.updateProduct(
+                foodService.updateFood(
                   docID,
                   productNameController.text,
                   productPriceController.text,
+                  productImageController.text
                 );
               }
 
               productNameController.clear();
               productPriceController.clear();
+              productImageController.clear();
 
               Navigator.pop(context);
             },
@@ -101,7 +103,7 @@ class _MyFoodsState extends State<MyFoods> {
         child: const Icon(Icons.add),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: productService.getProductStream(),
+        stream: foodService.getFoodStream(),
         builder: (context, snapshot) {
           if(snapshot.hasData) {
             List productList = snapshot.data!.docs;
@@ -115,7 +117,7 @@ class _MyFoodsState extends State<MyFoods> {
 
                 Map<String, dynamic> data =
                     document.data() as Map<String, dynamic>;
-                String productText = data['product'];
+                String productText = data['food'];
                 String priceText = "\$"+data['price'];
                 String imageUrl = data['image'];
 
@@ -137,7 +139,7 @@ class _MyFoodsState extends State<MyFoods> {
                           icon: const Icon(Icons.edit),
                         ),
                         IconButton(
-                          onPressed: () => productService.deleteProduct(docID),
+                          onPressed: () => foodService.deleteFood(docID),
                           icon: const Icon(Icons.delete),
                         ),
                       ],

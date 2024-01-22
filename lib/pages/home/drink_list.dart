@@ -1,68 +1,138 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_food_ordering/services/firestore.dart';
 
-class MyDrinks extends StatelessWidget {
+class MyDrinks extends StatefulWidget {
   const MyDrinks({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Center(
-          child: Text("Drinks"),
+  State<MyDrinks> createState() => _MyDrinksState();
+}
+
+class _MyDrinksState extends State<MyDrinks> {
+
+  final DrinkService drinkService = DrinkService();
+  final user = FirebaseAuth.instance.currentUser!;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+
+  void openProductBox({String? docID}) {
+    TextEditingController productNameController = TextEditingController();
+    TextEditingController productPriceController = TextEditingController();
+    TextEditingController productImageController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: productNameController,
+              decoration: const InputDecoration(labelText: 'Product Name'),
+            ),
+            TextField(
+              controller: productPriceController,
+              decoration: const InputDecoration(labelText: 'Price'),
+            ),
+            TextField(
+              controller: productImageController,
+              decoration: const InputDecoration(labelText: 'Image Link'),
+            ),
+          ],
         ),
-      ),
-      body: ListView(
-        children: const <Widget>[
-          CategorySection(category: 'Cow Piss'),
-          CategorySection(category: 'Coffee'),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              if (docID == null) {
+                drinkService.addDrink(
+                    productNameController.text,
+                    productPriceController.text,
+                    productImageController.text
+                );
+              } else {
+                drinkService.updateDrink(
+                  docID,
+                  productNameController.text,
+                  productPriceController.text,
+                  productImageController.text
+                );
+              }
+
+              productNameController.clear();
+              productPriceController.clear();
+
+              Navigator.pop(context);
+            },
+            child: const Text("Add"),
+          )
         ],
       ),
     );
   }
-}
 
-class CategorySection extends StatelessWidget {
-  final String category;
-
-  const CategorySection({Key? key, required this.category}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            category,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text('Item $index'),
-              subtitle: const Text('Price: \$10'),
-              trailing: ElevatedButton(
-                onPressed: () {
-                  print('Button clicked for Item $index in $category');
-                },
-                child: const Icon(Icons.add),
-              ),
+    return Scaffold(
+      appBar: AppBar(title: const Text("Foods")),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          openProductBox();
+        },
+        child: const Icon(Icons.add),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: drinkService.getDrinkStream(),
+        builder: (context, snapshot) {
+          if(snapshot.hasData) {
+            List productList = snapshot.data!.docs;
+
+            return ListView.builder(
+                itemCount: productList.length,
+                itemBuilder: (context, index) {
+
+                  DocumentSnapshot document = productList[index];
+                  String docID = document.id;
+
+                  Map<String, dynamic> data =
+                  document.data() as Map<String, dynamic>;
+                  String productText = data['drink'];
+                  String priceText = "\$"+data['price'];
+                  String imageUrl = data['image'];
+
+                  return Container(
+                    decoration: BoxDecoration(color: Colors.black87,
+                        borderRadius: BorderRadius.circular(10)),
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(imageUrl),
+                      ),
+                      title: Text(productText),
+                      subtitle: Text(priceText),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            onPressed: () => openProductBox(docID: docID),
+                            icon: const Icon(Icons.edit),
+                          ),
+                          IconButton(
+                            onPressed: () => drinkService.deleteDrink(docID),
+                            icon: const Icon(Icons.delete),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
             );
-          },
-        ),
-        const Divider(
-          thickness: 1,
-          color: Colors.grey,
-        ),
-      ],
+          } else {
+            return const Center(child: Text("No data"));}
+        },
+      ),
     );
   }
 }

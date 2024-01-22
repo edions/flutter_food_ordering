@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_food_ordering/pages/home/drink_list.dart';
 import 'package:flutter_food_ordering/pages/home/food_list.dart';
 import 'package:flutter_food_ordering/pages/home/home.dart';
 
@@ -18,6 +19,7 @@ class _NavigationWidget extends State<NavigationWidget> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     MyFoods(),
+    MyDrinks(),
     Text(
       'Index 2: School',
       style: optionStyle,
@@ -50,9 +52,9 @@ class _NavigationWidget extends State<NavigationWidget> {
               children: [
                 const DrawerHeader(
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    //color: Colors.blue,
                   ),
-                  child: Text('Drawer Header'),
+                  child: Text('A D M I N'),
                 ),
                 ListTile(
                   title: const Text('Home'),
@@ -65,7 +67,7 @@ class _NavigationWidget extends State<NavigationWidget> {
                   },
                 ),
                 ListTile(
-                  title: const Text('Business'),
+                  title: const Text("Foods"),
                   selected: _selectedIndex == 1,
                   onTap: () {
                     // Update the state of the app
@@ -75,11 +77,21 @@ class _NavigationWidget extends State<NavigationWidget> {
                   },
                 ),
                 ListTile(
-                  title: const Text('School'),
+                  title: const Text('Drinks'),
                   selected: _selectedIndex == 2,
                   onTap: () {
                     // Update the state of the app
                     _onItemTapped(2);
+                    // Then close the drawer
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Orders'),
+                  selected: _selectedIndex == 3,
+                  onTap: () {
+                    // Update the state of the app
+                    _onItemTapped(3);
                     // Then close the drawer
                     Navigator.pop(context);
                   },
