@@ -3,6 +3,8 @@ import 'package:flutter_food_ordering/pages/home/drink_list.dart';
 import 'package:flutter_food_ordering/pages/home/food_list.dart';
 import 'package:flutter_food_ordering/pages/home/home.dart';
 
+import '../pages/profile/order.dart';
+
 class NavigationWidget extends StatefulWidget {
   const NavigationWidget({super.key});
 
@@ -20,10 +22,7 @@ class _NavigationWidget extends State<NavigationWidget> {
     HomePage(),
     MyFoods(),
     MyDrinks(),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
+    MyOrderPage()
   ];
 
   void _onItemTapped(int index) {
