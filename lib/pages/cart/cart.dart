@@ -29,7 +29,11 @@ class _CartPageState extends State<CartPage> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
+                  // Call a method to delete everything from the cart
+                  cartService.clearCart(userId);
 
+                  // Close the dialog after confirming the order
+                  Navigator.of(context).pop();
                 },
                 child: const Text("Confirm Order"),
               ),
