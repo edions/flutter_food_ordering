@@ -28,7 +28,7 @@ class _MyOrderPageState extends State<MyOrderPage> {
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore
             .collection("orders")
-            .where("userId", isEqualTo: userId)
+            .where(userId)
             .orderBy("deleteTimestamp", descending: true)
             .snapshots(),
         builder: (context, snapshot) {
@@ -40,11 +40,14 @@ class _MyOrderPageState extends State<MyOrderPage> {
               itemBuilder: (context, index) {
                 DocumentSnapshot document = orderList[index];
                 String productId = document['productId'];
-                String deleteTimestamp = document['deleteTimestamp'].toString();
+                Timestamp deleteTimestamp = document['deleteTimestamp'];
+
+                DateTime dateTime = deleteTimestamp.toDate(); // Convert Timestamp to DateTime
+                String formattedTimestamp = "${dateTime.toLocal()}"; // Format the DateTime as a string
 
                 return ListTile(
-                  title: Text("Deleted Product ID: $productId"),
-                  subtitle: Text("Delete Timestamp: $deleteTimestamp"),
+                  title: Text("Tracking Number: $productId"),
+                  subtitle: Text("Ordered Date: $formattedTimestamp"),
                 );
               },
             );
